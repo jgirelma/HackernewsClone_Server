@@ -1,13 +1,17 @@
-if (process.env.NODE_ENV === "dev")
-  require("dotenv").config();
+if (process.env.NODE_ENV === "dev") require("dotenv").config();
 import express from "express";
-import cors from "cors";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
 import { errorMiddleware } from "./api/middleware/error";
 import { apiRouter } from "./api";
-import { createUsersTable, createPostsTable, createCommentsTable, createPostVotesTable, createCommentVotesTable } from "./db";
+import {
+  createUsersTable,
+  createPostsTable,
+  createCommentsTable,
+  createPostVotesTable,
+  createCommentVotesTable,
+} from "./db";
 
 (async () => {
   //Wait for db and redis to start
@@ -17,7 +21,13 @@ import { createUsersTable, createPostsTable, createCommentsTable, createPostVote
 
   const app = express();
 
-  app.use(cors())
+  app.use(function(_req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Methods', 'GET, POST');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', "true");
+    return next();
+  });
 
   const RedisStore = connectRedis(session);
 
@@ -33,12 +43,22 @@ import { createUsersTable, createPostsTable, createCommentsTable, createPostVote
     session({
       store: new RedisStore({ client }),
       secret: process.env.COOKIE_SECRET!,
+      proxy: true,
       name: "sid",
       resave: false,
       saveUninitialized: true,
-      cookie: { secure: true, httpOnly: true, maxAge: 1000 * 60 * 60 * 7 },
+      cookie: { secure: false, sameSite:'lax', httpOnly: true, maxAge: 1000 * 60 * 60 * 7 },
     })
   );
+
+  app.use((req, _res, next) => {
+    console.log("-------");
+    console.log(req.headers);
+    console.log(req.body);
+    console.log(req.path)
+    console.log("-------");
+    next();
+  });
 
   app.use("/api", apiRouter);
 
@@ -54,7 +74,6 @@ import { createUsersTable, createPostsTable, createCommentsTable, createPostVote
     await createPostVotesTable();
 
     await createCommentVotesTable();
-    
   } catch (err) {
     console.log(err);
   }
