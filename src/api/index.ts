@@ -10,11 +10,6 @@ import { comment } from "./routes/comment"
 
 const router = Router()
 
-router.use((req, _res, next) => {
-  console.log(req)
-  next()
-})
-
 router.use(register)
 
 router.use(logout)
