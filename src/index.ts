@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV === "dev")
   require("dotenv").config();
 import express from "express";
-import https from "https"
+import cors from "cors";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import Redis from "ioredis";
@@ -16,6 +16,8 @@ import { createUsersTable, createPostsTable, createCommentsTable, createPostVote
   );
 
   const app = express();
+
+  app.use(cors())
 
   const RedisStore = connectRedis(session);
 
@@ -57,7 +59,7 @@ import { createUsersTable, createPostsTable, createCommentsTable, createPostVote
     console.log(err);
   }
 
-  https.createServer(app).listen(process.env.PORT || 3000, async () => {
-    console.log(`Listining on ${process.env.PORT || 3000}`);
+  app.listen(4000, async () => {
+    console.log(`Listining on $4000`);
   });
 })();
