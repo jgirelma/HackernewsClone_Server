@@ -34,6 +34,7 @@ export const createPostsTable = async () => {
     by integer NOT NULL REFERENCES users(id),
     title text NOT NULL,
     body text NOT NULL,
+    score integer NOT NULL DEFAULT 0,
     timestamp integer NOT NULL)`);
 };
 
@@ -49,6 +50,7 @@ export const createCommentsTable = async () => {
     post_id integer NOT NULL REFERENCES posts(id),
     body text NOT NULL,
     timestamp integer NOT NULL,
+    score integer NOT NULL DEFAULT 0,
     parent_id integer REFERENCES comments(id) )`);
 };
 
