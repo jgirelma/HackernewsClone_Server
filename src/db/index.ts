@@ -65,7 +65,7 @@ export const createCommentVotesTable = async () => {
     CREATE TABLE IF NOT EXISTS comment_votes (
       user_id integer NOT NULL REFERENCES users(id),
       comment_id integer NOT NULL REFERENCES comments(id),
-      vote integer NOT NULL,
+      status integer NOT NULL,
       PRIMARY KEY (user_id, comment_id)
     )
   `)
@@ -76,7 +76,7 @@ export const createPostVotesTable = async () => {
     CREATE TABLE IF NOT EXISTS post_votes (
       user_id integer NOT NULL REFERENCES users(id),
       post_id integer NOT NULL REFERENCES posts(id),
-      vote integer NOT NULL,
+      status integer NOT NULL,
       PRIMARY KEY (user_id, post_id)
     )
   `)
