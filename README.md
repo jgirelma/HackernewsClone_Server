@@ -1,4 +1,6 @@
-# This is an express server which implements a simple authentication api using postgress, express-session, redis, and typescript
+## HackernewsClone Backend
+
+This is an express server which implements authentication, and an api to interact with the database which contains posts, comments, and scores.
 
 ## Production
 
@@ -12,7 +14,3 @@ docker build -t local/ts-node-postgres-auth .
 1. docker-compose -f docker-compose.dev.yml
 
 2. npm run dev
-
-### Routes
-
-GET /api/posts
